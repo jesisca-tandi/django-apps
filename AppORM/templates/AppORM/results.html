@@ -1,0 +1,14 @@
+<html>
+	<body>
+		<table>
+			{% for r in records %}
+				<tr>
+					<td>{{ r.i_id }}</td>
+					<td>{{ r.i_im_id }}</td>
+					<td>{{ r.i_name }}</td>
+					<td>{{ r.i_price }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>

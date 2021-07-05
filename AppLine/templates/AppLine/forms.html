@@ -1,0 +1,455 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+		<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+		<style type="text/css">
+			head, body {
+				margin:0;
+				font-family: Open Sans, "Verdana", sans-serif;
+				font-size: 12pt;
+				background: #008080;
+			}
+
+			.displayTable {
+				width: 100%;
+				background: #e8e8e8;
+				padding: 5px;
+				margin: 0px;
+			}
+
+			.search {
+				position: static;
+				width: 100%;
+				left: 0;
+				top: 200px;
+			}
+
+			.layoutBox {
+				float:left; 
+				width: 15%;
+				margin: 10px;
+				padding: 10px;
+				background: rgba(255,255,255,0.2);
+				border-radius: 20px;
+			}
+			.searchBox {
+				float:left; 
+				width: 35%;
+				height: 80%;
+				overflow: scroll !important;
+				margin: 10px;
+				padding: 10px;
+			}
+
+			.searchChild {
+				width: 100%;
+				padding-bottom: 20px;
+			}
+
+			::-webkit-scrollbar {
+			  -webkit-appearance: none;
+			  width: 10px;
+			}
+
+			::-webkit-scrollbar-thumb {
+			  border-radius: 5px;
+			  background-color: rgba(0,0,0,.5);
+			  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+			}			
+			::-webkit-scrollbar-corner {
+				background-color: rgba(0,0,0,0);
+			}
+
+			.selectedStyle {
+				width: 20%;
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+
+			.buttonStyle {
+				background: white;
+				color: black;
+				font-family: Open Sans, "Verdana", sans-serif;
+				font-size: 12pt;
+				padding: 10px 20px;
+				border-radius: 10px;
+			}
+			.buttonStyle:hover {
+				background:  #999999;
+				color: black;
+				font-weight: bold;
+			}
+
+			.lineTypeStyle {
+				font-family: Open Sans, "Verdana", sans-serif;
+				font-size: 12pt;
+				margin-top: 10px;
+				background: rgba(255,255,255,0.2);
+				height: 30px;
+				width: 90%;
+				border: 0px;
+				border-bottom: 1px solid black;
+
+			}
+
+			.searchContainer {
+				display: block;
+				position: relative;
+				padding-left: 35px;
+				margin-bottom: 12px;
+				cursor: pointer;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+
+			.searchContainer input {
+				position: absolute;
+				opacity: 0;
+				cursor: pointer;
+				height: 0;
+				width: 0;
+			}
+			.checkmark {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 25px;
+				width: 25px;
+				background-color: rgba(192,192,192,0.5);
+			}
+
+			/* On mouse-over, add a grey background color */
+			.searchContainer:hover input ~ .checkmark {
+				background-color: #ccc;
+			}
+			/* On mouse-over, add a grey background color */
+			.searchContainer:hover .searchText{
+				color: yellow;
+				font-weight: bold;
+			}
+
+			/* When the checkbox is checked, add a blue background */
+			.searchContainer input:checked ~ .checkmark {
+				background-color: #2196F3;
+			}
+
+			/* Create the checkmark/indicator (hidden when not checked) */
+			.checkmark:after {
+				content: "";
+				position: absolute;
+				display: none;
+			}
+
+			/* Show the checkmark when checked */
+			.searchContainer input:checked ~ .checkmark:after {
+				display: block;
+			}
+
+			/* Style the checkmark/indicator */
+			.searchContainer .checkmark:after {
+				left: 9px;
+				top: 5px;
+				width: 5px;
+				height: 10px;
+				border: solid white;
+				border-width: 0 3px 3px 0;
+				-webkit-transform: rotate(45deg);
+				-ms-transform: rotate(45deg);
+				transform: rotate(45deg);
+			}
+
+			.warning {
+				color: red;
+			}
+			.cool {
+				color: white;
+			}
+
+			/* The alert message box */
+			.alert {
+				padding: 20px;
+				background-color: rgba(10,10,10,0.8); /* Red */
+				color: white;
+				font-weight: bold;
+				text-align: center;
+				vertical-align: middle;
+				position: fixed;
+				top:0;
+				left:0;
+				width: 100%;
+				height: 100%;
+				z-index: 2
+			}
+
+			/* The close button */
+			.closebtn {
+				margin-left: 15px;
+				right: 100px;
+				color: white;
+				font-weight: bold;
+				float: right;
+				font-size: 22px;
+				line-height: 20px;
+				cursor: pointer;
+				transition: 0.3s;
+				position: fixed;
+				z-index: 100;
+			}
+
+			/* When moving the mouse over the close button */
+			.closebtn:hover {
+				color: black;
+			} 
+
+			.input-group {
+				display: flex;
+			}
+
+
+			.plus-minus-input {
+				-webkit-align-items: center;
+				-ms-flex-align: center;
+				align-items: center;
+			}
+
+			.plus-minus-input .input-group-field {
+				text-align: center;
+				margin-left: 0.5rem;
+				margin-right: 0.5rem;
+				padding: 1rem;
+			}
+
+			.plus-minus-input .input-group-field::-webkit-inner-spin-button,
+			.plus-minus-input .input-group-field ::-webkit-outer-spin-button {
+				-webkit-appearance: none;
+				appearance: none;
+			}
+
+			.plus-minus-input .input-group-button .circle {
+				border-radius: 50%;
+				border: 2px solid #5BC0BE;
+				padding: 10px 10px;
+				background: white;
+			}
+
+
+
+		</style>
+
+		<script type="text/javascript"> 
+
+			function editQ(i) {
+				document.getElementById('Quantity').value = Math.max((Number(document.getElementById('Quantity').value) + Number(i)), 0);
+			}
+
+			function showWarehouse() {
+
+				var selectedItem = document.getElementsByName('itemId');
+				var isItemSelected = false;
+				for ( var i = 0; i < selectedItem.length; i++) {
+					if(selectedItem[i].checked) {
+						isItemSelected = true;
+						document.getElementById('ItemName').setAttribute('value', selectedItem[i].value);
+
+						{% for r in itemRecords %};
+							if (selectedItem[i].value == '{{ r.i_id }}') {
+								var itemDetails = '<div class="itemStyle"><div>{{ r.i_name }}</div><div>Price : {{ r.i_price }}</div></div>';
+							};
+						{% endfor %};
+
+						document.getElementById('ItemNameShown').innerHTML = itemDetails;
+						break;
+					}
+				}
+
+				var selectedItem = document.getElementsByName('warehouseId');
+				var isItemSelected = false;
+				for ( var i = 0; i < selectedItem.length; i++) {
+					if(selectedItem[i].checked) {
+						isItemSelected = true;
+						document.getElementById('Warehouse').setAttribute("value", selectedItem[i].value);
+
+						{% for r in warehouseRecords %};
+							if (selectedItem[i].value == '{{ r.w_id }}') {
+								var warehouseDetails = '<div class="itemStyle"><div>{{ r.w_name }}</div><div>{{ r.w_street }}, {{ r.w_city }}, {{ r.w_country }}</div></div>';
+							};
+						{% endfor %};
+						document.getElementById('WarehouseShown').innerHTML = warehouseDetails;
+						break;
+					}
+				}
+
+			}
+		</script>
+
+	</head>
+
+	<body>
+
+		<form method="POST" action="{% url 'processRequest' %}">
+
+			{% csrf_token %}
+
+			<div class="displayTable">
+
+				<table>
+
+					<tr>
+						<td colspan="5" style="border-bottom: 1px solid black;"><b style="font-size: 150%;">Your basket</b></td>
+					</tr>
+
+					<tr>
+						<td class='selectedStyle'><b>Item</b></td>
+						<td class='selectedStyle'><b>Warehouse</b></td>
+						<td class='selectedStyle'><b>Quantity</b></td>
+						<td class='selectedStyle'><b>Line type</b></td>
+						<td class='selectedStyle'></td>
+					</tr>
+
+					<tr>
+
+						<td class='selectedStyle'>
+							<input id='ItemName' name="ItemName" type="hidden" value="{{ ItemNameVal }}"/>
+							<div id='ItemNameShown'>{% autoescape off %}{{ ItemNameShown }}{% endautoescape %}</div>
+						</td>
+
+						<td class='selectedStyle'>
+							<input id='Warehouse' name="Warehouse" type="hidden" value="{{ WarehouseVal }}"/>
+							<div id='WarehouseShown'>{% autoescape off %}{{ WarehouseShown }}{% endautoescape %}</div>
+						</td>
+
+						<td class='selectedStyle'>
+							<div class="input-group plus-minus-input">
+								<div class="input-group-button">
+									<button type="button" class="button hollow circle" onclick="editQ(-5);">
+										<i class="fa fa-minus" aria-hidden="true"></i>
+									</button>
+								</div>
+								<input id='Quantity' name="Quantity" type="number" step="1" min="0" class="input-group-field lineTypeStyle" value="{{ QuantityShown }}" style="width: 75px; height: 50px; background: white;"/>
+								<div class="input-group-button">
+									<button type="button" class="button hollow circle" onclick="editQ(5);">
+										<i class="fa fa-plus" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</td>
+
+						<td class='selectedStyle'>
+							<select id='LineType' name="LineType" class="lineTypeStyle" style="width: 150px">
+								<option value='Delivery' {% if lineTypeShown == "Delivery" %} selected {% endif %}>Delivery</option>
+								<option value='Order' {% if lineTypeShown == "Order" %} selected {% endif %}>Order</option>
+							</select>
+						</td>
+
+						<td class='selectedStyle'><input class="buttonStyle" name="checkStockButton" type="submit" value="Place order/delivery" style="width: 250px; height: 100px;">
+						</td>
+
+					</tr>
+
+				</table>
+
+				<br>
+
+				<div>
+
+					{% if lineType == 'Order' %}
+						{% if successFlag %}
+							<div class="alert">
+								<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+								<div class='cool'>Your line order has been accepted. Continue with your next item.</div>
+							</div>
+						{% else %}
+							<div class="alert">
+								<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+
+								<div class='warning'>Sorry, the warehouse has insufficient stock. Please select other warehouse or change your item.</div>
+							</div>
+						{% endif %}
+					{% elif lineType == 'Delivery' %}
+						<div class="alert">
+							<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+							<div class='cool'>Your line delivery has been accepted. Continue with your next item.</div>
+						</div>
+					{% endif %}
+
+					{% if errorMessage %}
+						<div class="alert">
+							<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+							<div class='warning'><b>Sorry, there is a problem processing your order</b></div>
+							{% for m in errorMessage %}
+								<div class='warning'>{{ m }}</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+
+				</div>
+				<br>
+				
+			</div>
+			
+
+			<div class='search'>
+
+				<div class='layoutBox'>
+					<div class='searchChild'>
+						Search items with Regex:<br>
+						<input type="text" name="itemsRegex" id="itemsRegex" value="{{ itemStr }}"  class="lineTypeStyle"><br>
+					</div>
+					<div class='searchChild'>
+						Search warehouse with Regex:<br>
+						<input type="text" name="warehouseRegex" id="warehouseRegex" value="{{ warehouseStr }}"  class="lineTypeStyle"><br>
+					</div>
+					<div class='searchChild'>
+						<input class="buttonStyle" name="getItemsButton" type="submit" value="Search">
+					</div>
+				</div>
+
+				<div class='searchBox'>
+					{% if itemRecords %}
+						<div class='searchChild'>
+							<p style='color:white;'><b>Search results for items:</b></p>
+
+							{% for r in itemRecords %}
+							<label class="searchContainer">
+								<input type="radio" name='itemId' onclick="showWarehouse();" value="{{ r.i_id }}">
+								</input>
+								<div class='searchText'>
+									<div style="float:left; font-weight: bold;">{{ r.i_name }}</div>  
+									<div style="float:right; font-weight: bold;">${{ r.i_price }}</div> | ID: {{ r.i_id }} {{ r.i_im_id }}
+								</div>
+								<span class='checkmark'></span>
+							</label>
+							{% endfor %}
+
+						</div>
+					{% else %}
+						<p style='color:white;'><i>No search results for items</i></p>
+					{% endif %}
+				</div>
+
+				<div class='searchBox'>
+					{% if warehouseRecords %}
+						<div class='searchChild'>
+							<p style='color:white;'><b>Search results for warehouse:</b></p>
+
+							{% for r in warehouseRecords %}
+							<label class="searchContainer">
+								<input type="radio" name='warehouseId' onclick="showWarehouse();" value="{{ r.w_id }}"></input>
+								<div class='searchText'><div style="display:inline; font-weight: bold;">{{ r.w_name }}</div> {{ r.w_street }}, {{ r.w_city }}, {{r.w_country}} | ID: {{ r.w_id }}</div>
+								<span class='checkmark'></span>
+							</label>
+							{% endfor %}
+						</div>
+					{% else %}
+						<p style='color:white;'><i>No search results for warehouse</i></p>
+					{% endif %}
+
+				</div>
+
+			</div>
+		</form>
+
+	</body>
+</html>
